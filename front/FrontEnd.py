@@ -1,8 +1,6 @@
 import curses
 import curses.textpad
-
-from readDir.readDir import readDir
-
+from readDir.ReadDir import ReadDir
 import sys
 
 class FrontEnd:
@@ -10,6 +8,7 @@ class FrontEnd:
     def __init__(self, player):
         self.player = player
         #self.player.play(sys.argv[1])
+        self.readDir = ReadDir()
         curses.wrapper(self.menu)
 
     def menu(self, args):
@@ -33,6 +32,10 @@ class FrontEnd:
                 self.updateSong()
                 self.stdscr.touchwin()
                 self.stdscr.refresh()
+            elif c == ord("l"):
+              # print("hello")
+               self.library()
+	                      
     
     def updateSong(self):
         self.stdscr.addstr(15,10, "                                        ")
@@ -51,7 +54,20 @@ class FrontEnd:
         self.stdscr.refresh()
         self.player.stop()
         self.player.play(path.decode(encoding="utf-8"))
-        
+	
+    def library(self):
+        libraryWindow = curses.newwin(5, 40, 5, 50)
+        libraryWindow.border()
+        self.stdscr.refresh()
+        self.stdscr.touchwin()
+        contents = self.readDir.readDir("./media")
+        y = 0
+        for val in contents:
+            #changeWindow.addstr(0, y, val, curses.A_REVERSE)
+            y+=2
+        #elf.stdscr.refresh()
+        #elf.stdscr.touchwin()
+        #self.stdscr.refresh()
 
     def quit(self):
         self.player.stop()
