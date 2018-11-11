@@ -1,6 +1,7 @@
 import curses
 import curses.textpad
 from readDir.ReadDir import ReadDir
+from library.Library import Library
 import sys
 
 class FrontEnd:
@@ -9,11 +10,13 @@ class FrontEnd:
         self.player = player
         #self.player.play(sys.argv[1])
         self.readDir = ReadDir()
-        self.libraryFlag = False
+        self.library = Library()
         curses.wrapper(self.menu)
 
     def menu(self, args):
         self.stdscr = curses.initscr()
+        curses.start_color()
+        self.stdscr.keypad(1) 
         self.stdscr.border()
         self.stdscr.addstr(0,0, "cli-audio",curses.A_REVERSE)
         self.stdscr.addstr(5,10, "c - Change current song")
@@ -24,8 +27,8 @@ class FrontEnd:
         self.stdscr.refresh()
         while True:
             c = self.stdscr.getch()
-            if self.libraryFlag:
-                self.library()
+            # if self.libraryFlag:
+                # self.library()
             if c == 27:
                 self.quit()
             elif c == ord('p'):
@@ -36,14 +39,14 @@ class FrontEnd:
                 self.stdscr.touchwin()
                 self.stdscr.refresh()
             elif c == ord('l'):
-                self.library()
+                self.library.library(self.stdscr, self.readDir.readDir("./media"))
                 self.stdscr.touchwin()
                 self.stdscr.refresh()
                 # if self.libraryFlag:
                 #     self.libraryFlag = False
                 # else:
                 #     self.libraryFlag = True
-	         
+             
     
     def updateSong(self):
         self.stdscr.addstr(15,10, "                                        ")
@@ -62,7 +65,7 @@ class FrontEnd:
         self.stdscr.refresh()
         self.player.stop()
         self.player.play(path.decode(encoding="utf-8"))
-	
+    
     # def library(self):
     #     contents = self.readDir.readDir("./media")
     #     y = 5
@@ -71,20 +74,20 @@ class FrontEnd:
     #         y+=1
     #         self.stdscr.addstr(y, 100, val)
     #     self.stdscr.refresh()
-    def library(self):
-        changeWindow = curses.newwin(50, 50, 5, 50)
-        # changeWindow.border()
-        y = 2
-        changeWindow.addstr(0,0, "Library", curses.A_REVERSE)
-        # y += 1
-        # changeWindow.addstr(y,2, "----------------", curses.A_REVERSE)
-        contents = self.readDir.readDir("./media")
+    # def library(self):
+    #     changeWindow = curses.newwin(50, 50, 5, 50)
+    #     # changeWindow.border()
+    #     y = 2
+    #     changeWindow.addstr(0,0, "Library", curses.A_REVERSE)
+    #     # y += 1
+    #     # changeWindow.addstr(y,2, "----------------", curses.A_REVERSE)
+    #     contents = self.readDir.readDir("./media")
         
-        for val in contents:
-            y+=1
-            changeWindow.addstr(y, 2, val, curses.A_REVERSE)
+    #     for val in contents:
+    #         y+=1
+    #         changeWindow.addstr(y, 2, val, curses.A_REVERSE)
 
-        path = changeWindow.getstr(1,1, 30)
+    #     path = changeWindow.getstr(1,1, 30)
             
         
 
