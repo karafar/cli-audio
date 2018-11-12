@@ -8,7 +8,7 @@ class FrontEnd:
 
     def __init__(self, player):
         self.player = player
-        #self.player.play(sys.argv[1])
+        self.player.play(sys.argv[1])
         self.readDir = ReadDir()
         self.library = Library()
         curses.wrapper(self.menu)
@@ -39,7 +39,8 @@ class FrontEnd:
                 self.stdscr.touchwin()
                 self.stdscr.refresh()
             elif c == ord('l'):
-                self.library.library(self.stdscr, self.readDir.readDir("./media"))
+                self.changeSong(self.library.library(self.stdscr, self.readDir.readDir("./media")))
+                self.updateSong()
                 self.stdscr.touchwin()
                 self.stdscr.refresh()
                 # if self.libraryFlag:
@@ -52,19 +53,23 @@ class FrontEnd:
         self.stdscr.addstr(15,10, "                                        ")
         self.stdscr.addstr(15,10, "Now playing: " + self.player.getCurrentSong())
 
-    def changeSong(self):
-        changeWindow = curses.newwin(5, 40, 5, 50)
-        changeWindow.border()
-        changeWindow.addstr(0,0, "What is the file path?", curses.A_REVERSE)
-        self.stdscr.refresh()
-        curses.echo()
-        path = changeWindow.getstr(1,1, 30)
-        curses.noecho()
-        del changeWindow
-        self.stdscr.touchwin()
-        self.stdscr.refresh()
-        self.player.stop()
-        self.player.play(path.decode(encoding="utf-8"))
+    def changeSong(self, song=None):
+        if song == None:
+            changeWindow = curses.newwin(5, 40, 5, 50)
+            changeWindow.border()
+            changeWindow.addstr(0,0, "What is the file path?", curses.A_REVERSE)
+            self.stdscr.refresh()
+            curses.echo()
+            path = changeWindow.getstr(1,1, 30)
+            curses.noecho()
+            del changeWindow
+            self.stdscr.touchwin()
+            self.stdscr.refresh()
+            self.player.stop()
+            self.player.play(path.decode(encoding="utf-8"))
+        else:
+            self.player.stop()
+            self.player.play( ("media/" + song).decode(encoding="utf-8") )
     
     # def library(self):
     #     contents = self.readDir.readDir("./media")
