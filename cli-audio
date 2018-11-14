@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# Prof. Ira Woodring
+# 11/14/2018
+# CIS 343
+
 from front.FrontEnd import FrontEnd
 from player.Player import Player
 from curses import wrapper

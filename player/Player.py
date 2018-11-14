@@ -1,3 +1,7 @@
+# Prof. Ira Woodring
+# 11/14/2018
+# CIS 343
+
 """PyAudio Example: Play a wave file (callback version)."""
 
 import pyaudio
@@ -9,6 +13,7 @@ class Player:
         self.currentSong = "Nothing playing."
         self.paused = True
         self.position = 0
+        self.stream = None
 
     def getCurrentSong(self):
         return self.currentSong
@@ -23,6 +28,8 @@ class Player:
 
     def play(self, track):
         self.paused = False
+        if track == None:
+            return
         self.currentSong = track
         self.wf = wave.open(track, 'rb')
 
@@ -31,15 +38,17 @@ class Player:
 
         # open self.stream using callback (3)
         self.stream = self.p.open(format=self.p.get_format_from_width(self.wf.getsampwidth()),
-                channels=self.wf.getnchannels(),
-                rate=self.wf.getframerate(),
-                output=True,
-                stream_callback=self.callback)
+            channels=self.wf.getnchannels(),
+            rate=self.wf.getframerate(),
+            output=True,
+            stream_callback=self.callback)
 
         # start the self.stream (4)
         self.stream.start_stream()
 
     def stop(self):
+        if self.stream == None:
+            return
         self.stream.stop_stream()
         self.stream.close()
         self.wf.close()
@@ -50,3 +59,4 @@ class Player:
         data = self.wf.readframes(frame_count)
         return (data, pyaudio.paContinue)
 
+    # def openStream

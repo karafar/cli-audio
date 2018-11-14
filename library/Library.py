@@ -1,4 +1,15 @@
-#!/usr/bin/python
+# Farid Karadsheh
+# 11/14/2018
+# CIS 343
+
+# --------- Note to prof. and GVSU faculty --------- #
+# The core of the functionality was inspired by a StackOverflow post.
+# https://stackoverflow.com/questions/30828804/how-to-make-a-scrolling-menu-in-python-curses
+# Although, the core concept behind this is pagination, which I have implemented in other projects.
+# With that in mind, I used this post as basis for my own pagination, and attempted to improve upon
+# the original post. Some of the changes include: documentation of the logic, consolidating of
+# superfluous branching statements, and changing position to be 0 based.
+
 import curses
 from curses import wrapper
 from readDir.ReadDir import ReadDir
@@ -31,7 +42,7 @@ class Library:
 		numPages = int( ceil(float(numRows)/float(maxRows)) )
 		position = 0
 		page = 1
-		libraryWindow = curses.newwin(maxRows + 2, 20, 5, 45)
+		libraryWindow = curses.newwin(maxRows + 2, 20, 5, 75)
 		libraryWindow.box()
 
 		# We populate the libraryWindow with the contents of media
