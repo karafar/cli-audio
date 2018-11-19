@@ -33,6 +33,8 @@ class Library:
 		# Read the media folder
 		readDir = ReadDir()
 		media = readDir.readDir("./media/")
+		if len(media) == 0:
+			return None
 
 		# Create new window and paginator
 		maxRows = 20
